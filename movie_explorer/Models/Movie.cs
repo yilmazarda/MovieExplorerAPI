@@ -1,0 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace movie_explorer.Models
+{
+    public class Movie
+    {
+        public int Id { get; set;}
+        public string Name { get; set;}
+        public string Description { get; set;}
+        public string ImageUrl { get; set;}
+        public string Language { get; set;}
+        public int VoteCount { get; set;}
+        public int VoteAverage { get; set;}
+        public int Popularity { get; set;}
+        public DateTime ReleaseDate { get; set;}
+
+        public ICollection<Genre> Genres { get; set; } = new List<Genre>();
+    }
+}
