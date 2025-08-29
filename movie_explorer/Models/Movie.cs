@@ -13,8 +13,8 @@ namespace movie_explorer.Models
         public string ImageUrl { get; set;}
         public string Language { get; set;}
         public int VoteCount { get; set;}
-        public int VoteAverage { get; set;}
-        public int Popularity { get; set;}
+        public float VoteAverage { get; set;}
+        public float Popularity { get; set;}
         public DateTime ReleaseDate { get; set;}
 
         public ICollection<Genre> Genres { get; set; } = new List<Genre>();

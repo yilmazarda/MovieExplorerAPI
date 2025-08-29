@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("848a2d09-9fc0-4ae3-9c25-b93e05bb28e6")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("movie_explorer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+084cfd28d329eb83328dd380cbc8a71c883f8db5")]
 [assembly: System.Reflection.AssemblyProductAttribute("movie_explorer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("movie_explorer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

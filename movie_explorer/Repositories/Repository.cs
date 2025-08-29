@@ -17,9 +17,15 @@ public class Repository<T>(MovieContext context) : IRepository<T> where T : clas
     return entity;
   }
 
-  public async Task DeleteAllAsync(IEnumerable<T> entities)
+  public async Task AddAllAsync(IEnumerable<T> entities)
   {
-    _dbSet.RemoveRange(entities);
+    await _dbSet.AddRangeAsync(entities);
+    await _context.SaveChangesAsync();
+  }
+
+  public async Task DeleteAllAsync()
+  {
+    _dbSet.RemoveRange(_dbSet);
     await _context.SaveChangesAsync();
   }
 

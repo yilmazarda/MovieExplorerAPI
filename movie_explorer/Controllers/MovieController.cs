@@ -37,5 +37,11 @@ namespace movie_explorer.Controllers
             await _movieService.AddMovieAsync(movie);
             return CreatedAtAction(nameof(Get), new { id = movie.Id }, movie);
         }
+
+        [HttpPost("fetch")]
+        public async Task<IActionResult> Fetch() {
+            List<Movie> movies = await _movieService.FetchPopularMoviesAsync();
+            return Ok(movies);
+        }
     }
 }

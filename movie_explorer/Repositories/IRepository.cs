@@ -11,7 +11,8 @@ namespace movie_explorer.Repositories
         Task<T?> GetByIdAsync(int id);
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
+        Task AddAllAsync(IEnumerable<T> entities);
         Task DeleteAsync(T entity);
-        Task DeleteAllAsync(IEnumerable<T> entities);
+        Task DeleteAllAsync();
     }
 }

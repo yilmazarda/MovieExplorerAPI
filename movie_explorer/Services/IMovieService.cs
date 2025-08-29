@@ -12,7 +12,7 @@ namespace movie_explorer.Services
         Task DeleteMovieAsync(Movie movie);
         Task<IQueryable<Movie>> GetAllMoviesAsync();
         Task<Movie> GetMovieByIdAsync(int id);
-
+        Task<List<Movie>> FetchPopularMoviesAsync();
         Task<Movie> UpdateMovieAsync(Movie quiz);
     }
 }

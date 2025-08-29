@@ -10,9 +10,11 @@ namespace movie_explorer.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _repository;
+        private readonly IExternalMovieService _externalMovieService;
 
-        public MovieService(IMovieRepository repository) {
+        public MovieService(IMovieRepository repository, IExternalMovieService externalMovieService) {
             _repository = repository;
+            _externalMovieService = externalMovieService;
         }
 
         public async Task<IQueryable<Movie>> GetAllMoviesAsync() => await _repository.GetAllAsync();
@@ -24,5 +26,14 @@ namespace movie_explorer.Services
         public async Task<Movie> UpdateMovieAsync(Movie movie) => await _repository.UpdateAsync(movie);
 
         public async Task DeleteMovieAsync(Movie movie) => await _repository.DeleteAsync(movie);
+
+        public async Task<List<Movie>> FetchPopularMoviesAsync()
+        {
+            var movies = await _externalMovieService.FetchPopularMoviesAsync();
+
+            await _repository.AddAllAsync(movies);
+
+            return movies;
+        }
     }
 }
