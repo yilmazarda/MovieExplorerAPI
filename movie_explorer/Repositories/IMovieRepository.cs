@@ -8,6 +8,6 @@ namespace movie_explorer.Repositories
 {
     public interface IMovieRepository : IRepository<Movie>
     {
-        
+        public Task<Movie?> GetByTmdbIdAsync(int id);
     }
 }

@@ -12,8 +12,8 @@ using movie_explorer.Data;
 namespace movie_explorer.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20250829144716_ModelChange")]
-    partial class ModelChange
+    [Migration("20250829233412_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,43 +27,37 @@ namespace movie_explorer.Migrations
 
             modelBuilder.Entity("GenreMovie", b =>
                 {
-                    b.Property<int>("GenresId")
+                    b.Property<int>("GenresTmdbId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MoviesId")
+                    b.Property<int>("MoviesTmdbId")
                         .HasColumnType("int");
 
-                    b.HasKey("GenresId", "MoviesId");
+                    b.HasKey("GenresTmdbId", "MoviesTmdbId");
 
-                    b.HasIndex("MoviesId");
+                    b.HasIndex("MoviesTmdbId");
 
                     b.ToTable("GenreMovie");
                 });
 
             modelBuilder.Entity("movie_explorer.Models.Genre", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("TmdbId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TmdbId");
 
                     b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("movie_explorer.Models.Movie", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("TmdbId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -93,7 +87,7 @@ namespace movie_explorer.Migrations
                     b.Property<int>("VoteCount")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("TmdbId");
 
                     b.ToTable("Movies");
                 });
@@ -102,13 +96,13 @@ namespace movie_explorer.Migrations
                 {
                     b.HasOne("movie_explorer.Models.Genre", null)
                         .WithMany()
-                        .HasForeignKey("GenresId")
+                        .HasForeignKey("GenresTmdbId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("movie_explorer.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("MoviesId")
+                        .HasForeignKey("MoviesTmdbId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

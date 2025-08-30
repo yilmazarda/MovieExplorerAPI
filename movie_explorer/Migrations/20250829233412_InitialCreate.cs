@@ -15,63 +15,61 @@ namespace movie_explorer.Migrations
                 name: "Genres",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TmdbId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genres", x => x.TmdbId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TmdbId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VoteCount = table.Column<int>(type: "int", nullable: false),
-                    VoteAverage = table.Column<int>(type: "int", nullable: false),
-                    Popularity = table.Column<int>(type: "int", nullable: false),
+                    VoteAverage = table.Column<float>(type: "real", nullable: false),
+                    Popularity = table.Column<float>(type: "real", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.PrimaryKey("PK_Movies", x => x.TmdbId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "GenreMovie",
                 columns: table => new
                 {
-                    GenresId = table.Column<int>(type: "int", nullable: false),
-                    MoviesId = table.Column<int>(type: "int", nullable: false)
+                    GenresTmdbId = table.Column<int>(type: "int", nullable: false),
+                    MoviesTmdbId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GenreMovie", x => new { x.GenresId, x.MoviesId });
+                    table.PrimaryKey("PK_GenreMovie", x => new { x.GenresTmdbId, x.MoviesTmdbId });
                     table.ForeignKey(
-                        name: "FK_GenreMovie_Genres_GenresId",
-                        column: x => x.GenresId,
+                        name: "FK_GenreMovie_Genres_GenresTmdbId",
+                        column: x => x.GenresTmdbId,
                         principalTable: "Genres",
-                        principalColumn: "Id",
+                        principalColumn: "TmdbId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GenreMovie_Movies_MoviesId",
-                        column: x => x.MoviesId,
+                        name: "FK_GenreMovie_Movies_MoviesTmdbId",
+                        column: x => x.MoviesTmdbId,
                         principalTable: "Movies",
-                        principalColumn: "Id",
+                        principalColumn: "TmdbId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GenreMovie_MoviesId",
+                name: "IX_GenreMovie_MoviesTmdbId",
                 table: "GenreMovie",
-                column: "MoviesId");
+                column: "MoviesTmdbId");
         }
 
         /// <inheritdoc />

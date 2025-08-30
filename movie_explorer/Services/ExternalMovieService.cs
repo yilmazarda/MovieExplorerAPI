@@ -24,8 +24,10 @@ namespace movie_explorer.Services
         public async Task<List<Movie>> FetchPopularMoviesAsync()
         {
             var response = await _httpClient.GetFromJsonAsync<ApiMovieResponse>($"{_baseUrl}/movie/popular?language=en-US&page=1&api_key={_apiKey}");
+
             var moviesToSave = response.Results.Select(m => new Movie
             {
+                TmdbId = m.Id,
                 Name = m.Name,
                 Description = m.Description,
                 ImageUrl = m.ImageUrl,
@@ -40,9 +42,23 @@ namespace movie_explorer.Services
         }
 
         
-        public async Task<string> FetchMovieByIdAsync(int id)
+        public async Task<Movie> FetchMovieByIdAsync(int id)
         {
-            return "notimplemented";
+           var response = await _httpClient.GetFromJsonAsync<ApiMovie>($"{_baseUrl}/movie/{id}?api_key={_apiKey}");
+
+           var movieToSave = new Movie{
+            TmdbId = response.Id,
+            Name = response.Name,
+            Description = response.Description,
+            ImageUrl = response.ImageUrl,
+            Language = response.Language,
+            VoteCount = response.VoteCount,
+            VoteAverage = response.VoteAverage,
+            Popularity = response.Popularity,
+            ReleaseDate = DateTime.TryParse(response.ReleaseDate, out var date) ? date : DateTime.MinValue,
+           };
+
+           return movieToSave;
         }
     }
 }

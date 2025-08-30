@@ -35,13 +35,17 @@ namespace movie_explorer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Movie movie) {
             await _movieService.AddMovieAsync(movie);
-            return CreatedAtAction(nameof(Get), new { id = movie.Id }, movie);
+            return CreatedAtAction(nameof(Get), new { TmdbId = movie.TmdbId }, movie);
         }
 
-        [HttpPost("fetch")]
+        [HttpPost("popular/fetch")]
         public async Task<IActionResult> Fetch() {
             List<Movie> movies = await _movieService.FetchPopularMoviesAsync();
             return Ok(movies);
         }
+
+        
+
+
     }
 }

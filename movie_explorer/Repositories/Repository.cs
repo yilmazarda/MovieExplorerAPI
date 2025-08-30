@@ -7,7 +7,7 @@ namespace movie_explorer.Repositories;
 public class Repository<T>(MovieContext context) : IRepository<T> where T : class
 {
   private readonly MovieContext _context = context;
-  private readonly DbSet<T> _dbSet = context.Set<T>();
+  protected readonly DbSet<T> _dbSet = context.Set<T>();
 
   public async Task<T> AddAsync(T entity)
   {
@@ -51,4 +51,6 @@ public class Repository<T>(MovieContext context) : IRepository<T> where T : clas
     await _context.SaveChangesAsync();
     return entity;
   }
+
+
 }

@@ -25,6 +25,12 @@ builder.Services.AddDbContext<MovieContext>(options =>
     options.UseSqlServer("Server=localhost,1433;Database=movie_db;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;")
 );
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+    options.InstanceName = "MovieExplorer_";
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
