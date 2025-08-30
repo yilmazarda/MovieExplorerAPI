@@ -21,6 +21,7 @@ namespace movie_explorer.Models
         public float VoteAverage { get; set;}
         public float Popularity { get; set;}
         public DateTime ReleaseDate { get; set;}
+        public DateTime LastUpdated { get; set;}
 
         public ICollection<Genre> Genres { get; set; } = new List<Genre>();
     }

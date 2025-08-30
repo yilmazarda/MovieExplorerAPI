@@ -43,7 +43,6 @@ namespace movie_explorer.Services
                 return movies;
             }
 
-
             movies = await _externalMovieService.FetchPopularMoviesAsync();
 
             foreach (var movie in movies)
@@ -61,6 +60,7 @@ namespace movie_explorer.Services
                     movie_data.Popularity = movie.Popularity;
                     movie_data.ReleaseDate = movie.ReleaseDate;
                     movie_data.Genres = movie.Genres;
+                    movie_data.LastUpdated = DateTime.UtcNow;
                     await _repository.UpdateAsync(movie_data);
                     continue;
                 }
@@ -82,27 +82,58 @@ namespace movie_explorer.Services
 
         public async Task<Movie> GetMovieByIdAsync(int id)
         {
+            _cache.Remove($"Movie Id: 17");
             var movie_data = await _cache.GetStringAsync($"Movie Id: {id.ToString()}"); //first check cache
             Movie movie = new Movie();
             if (movie_data != null)
             {
                 movie = JsonConvert.DeserializeObject<Movie>(movie_data);
                 Console.WriteLine("From cache");
-                return movie;
+            }
+            else 
+            {
+                movie = await _repository.GetByTmdbIdAsync(id); //then check db
+                if (movie != null)
+                {
+                    if (movie.LastUpdated < DateTime.Now.AddMinutes(-1))
+                    {
+                        
+                        var movieNewer = await _externalMovieService.FetchMovieByIdAsync(id);
+                        movie.Name = movieNewer.Name;
+                        movie.Description = movieNewer.Description;
+                        movie.ImageUrl = movieNewer.ImageUrl;
+                        movie.Language = movieNewer.Language;
+                        movie.VoteCount = movieNewer.VoteCount;
+                        movie.VoteAverage = movieNewer.VoteAverage;
+                        movie.Popularity = movieNewer.Popularity;
+                        movie.ReleaseDate = movieNewer.ReleaseDate;
+                        movie.LastUpdated = DateTime.UtcNow;
+                        await _repository.UpdateAsync(movie);
+                        Console.WriteLine("From DB and API");
+                    }
+                    else {
+                    Console.WriteLine("From DB");
+                    }
+                }
+                else 
+                {
+                    movie = await _externalMovieService.FetchMovieByIdAsync(id); //if not exist in cache&db, fetch
+                    Console.WriteLine("From API");
+                    await _repository.AddAsync(movie); //save to db
+                }
+
+                var jsonData = System.Text.Json.JsonSerializer.Serialize(movie);
+
+
+                var cacheOptions = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // 30 min lifetime
+                };
+
+                
+                await _cache.SetStringAsync($"Movie Id: {id.ToString()}", jsonData, cacheOptions); //save to cache
             }
 
-            movie = await _externalMovieService.FetchMovieByIdAsync(id); //if not exist in cache, fetch
-            var jsonData = System.Text.Json.JsonSerializer.Serialize(movie);
-            Console.WriteLine("From API");
-
-            var cacheOptions = new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // 30 min lifetime
-            };
-
-
-            
-            await _cache.SetStringAsync($"Movie Id: {id.ToString()}", jsonData, cacheOptions); //save to cache
             return movie;
         }
     }

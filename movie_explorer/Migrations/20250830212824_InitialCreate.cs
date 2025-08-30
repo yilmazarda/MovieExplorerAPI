@@ -35,7 +35,8 @@ namespace movie_explorer.Migrations
                     VoteCount = table.Column<int>(type: "int", nullable: false),
                     VoteAverage = table.Column<float>(type: "real", nullable: false),
                     Popularity = table.Column<float>(type: "real", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -12,7 +12,7 @@ using movie_explorer.Data;
 namespace movie_explorer.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20250829233412_InitialCreate")]
+    [Migration("20250830212824_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -70,6 +70,9 @@ namespace movie_explorer.Migrations
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
