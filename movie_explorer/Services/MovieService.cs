@@ -34,7 +34,17 @@ namespace movie_explorer.Services
 
         public async Task<List<Movie>> FetchPopularMoviesAsync()
         {
-            var movies = await _externalMovieService.FetchPopularMoviesAsync();
+            var popular_movies = await _cache.GetStringAsync("Popular-movies"); //first check cache
+            List<Movie> movies = new List<Movie>();
+            if (popular_movies != null)
+            {
+                movies = JsonConvert.DeserializeObject<List<Movie>>(popular_movies);
+                Console.WriteLine("From cache");
+                return movies;
+            }
+
+
+            movies = await _externalMovieService.FetchPopularMoviesAsync();
 
             foreach (var movie in movies)
             {
@@ -57,6 +67,15 @@ namespace movie_explorer.Services
                 
                 await _repository.AddAsync(movie);
             }
+
+            var jsonData = System.Text.Json.JsonSerializer.Serialize(movies);
+            Console.WriteLine("From API");
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // 30 min lifetime
+            };
+
+            await _cache.SetStringAsync("Popular-movies", jsonData, cacheOptions);
 
             return movies;
         }
