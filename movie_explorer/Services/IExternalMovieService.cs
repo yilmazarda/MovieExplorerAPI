@@ -9,6 +9,7 @@ namespace movie_explorer.Services
     public interface IExternalMovieService
     {
         Task<List<Movie>> FetchPopularMoviesAsync();
+        Task<List<Movie>> FetchTrendingMoviesAsync();
         Task<Movie> FetchMovieByIdAsync(int id);
     }
 }

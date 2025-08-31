@@ -41,6 +41,26 @@ namespace movie_explorer.Services
             return moviesToSave;
         }
 
+        public async Task<List<Movie>> FetchTrendingMoviesAsync()
+        {
+            var response = await _httpClient.GetFromJsonAsync<ApiMovieResponse>($"{_baseUrl}/trending/movie/week?api_key={_apiKey}");
+
+            var moviesToSave = response.Results.Select(m => new Movie
+            {
+                TmdbId = m.Id,
+                Name = m.Name,
+                Description = m.Description,
+                ImageUrl = m.ImageUrl,
+                Language = m.Language,
+                VoteCount = m.VoteCount,
+                VoteAverage = m.VoteAverage,
+                Popularity = m.Popularity,
+                ReleaseDate = DateTime.TryParse(m.ReleaseDate, out var date) ? date : DateTime.MinValue,
+            }).ToList();
+
+            return moviesToSave;
+        }
+
         
         public async Task<Movie> FetchMovieByIdAsync(int id)
         {

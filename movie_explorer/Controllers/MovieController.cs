@@ -38,12 +38,17 @@ namespace movie_explorer.Controllers
             return CreatedAtAction(nameof(Get), new { TmdbId = movie.TmdbId }, movie);
         }
 
-        [HttpPost("popular/fetch")]
+        [HttpGet("popular")]
         public async Task<IActionResult> Fetch() {
-            List<Movie> movies = await _movieService.FetchPopularMoviesAsync();
+            List<Movie> movies = await _movieService.GetPopularMoviesAsync();
             return Ok(movies);
         }
 
+        [HttpGet("trending")]
+        public async Task<IActionResult> GetTrending() {
+            List<Movie> movies = await _movieService.GetTrendingMoviesAsync();
+            return Ok(movies);
+        }
         
 
 

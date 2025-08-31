@@ -32,7 +32,7 @@ namespace movie_explorer.Services
 
         public async Task DeleteMovieAsync(Movie movie) => await _repository.DeleteAsync(movie);
 
-        public async Task<List<Movie>> FetchPopularMoviesAsync()
+        public async Task<List<Movie>> GetPopularMoviesAsync()
         {
             var popular_movies = await _cache.GetStringAsync("Popular-movies"); //first check cache
             List<Movie> movies = new List<Movie>();
@@ -80,9 +80,57 @@ namespace movie_explorer.Services
             return movies;
         }
 
+        public async Task<List<Movie>> GetTrendingMoviesAsync()
+        {
+            var trending_movies = await _cache.GetStringAsync("Trending-movies"); //first check cache
+            List<Movie> movies = new List<Movie>();
+            if (trending_movies != null)
+            {
+                movies = JsonConvert.DeserializeObject<List<Movie>>(trending_movies);
+                Console.WriteLine("From cache");
+                return movies;
+            }
+
+            movies = await _externalMovieService.FetchTrendingMoviesAsync();
+
+            foreach (var movie in movies)
+            {
+                var movie_data = await _repository.GetByTmdbIdAsync(movie.TmdbId);
+
+                if (movie_data != null)
+                {
+                    movie_data.Name = movie.Name;
+                    movie_data.Description = movie.Description;
+                    movie_data.ImageUrl = movie.ImageUrl;
+                    movie_data.Language = movie.Language;
+                    movie_data.VoteCount = movie.VoteCount;
+                    movie_data.VoteAverage = movie.VoteAverage;
+                    movie_data.Popularity = movie.Popularity;
+                    movie_data.ReleaseDate = movie.ReleaseDate;
+                    movie_data.Genres = movie.Genres;
+                    movie_data.LastUpdated = DateTime.UtcNow;
+                    await _repository.UpdateAsync(movie_data);
+                    continue;
+                }
+                
+                await _repository.AddAsync(movie);
+            }
+
+            var jsonData = System.Text.Json.JsonSerializer.Serialize(movies);
+            Console.WriteLine("From API");
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // 30 min lifetime
+            };
+
+            await _cache.SetStringAsync("Trending-movies", jsonData, cacheOptions);
+
+            return movies;
+        }
+        
+
         public async Task<Movie> GetMovieByIdAsync(int id)
         {
-            _cache.Remove($"Movie Id: 17");
             var movie_data = await _cache.GetStringAsync($"Movie Id: {id.ToString()}"); //first check cache
             Movie movie = new Movie();
             if (movie_data != null)
@@ -95,7 +143,7 @@ namespace movie_explorer.Services
                 movie = await _repository.GetByTmdbIdAsync(id); //then check db
                 if (movie != null)
                 {
-                    if (movie.LastUpdated < DateTime.Now.AddMinutes(-1))
+                    if (movie.LastUpdated < DateTime.Now.AddDays(-1))
                     {
                         
                         var movieNewer = await _externalMovieService.FetchMovieByIdAsync(id);
