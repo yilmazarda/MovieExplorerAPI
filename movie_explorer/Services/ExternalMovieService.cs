@@ -21,9 +21,9 @@ namespace movie_explorer.Services
             _baseUrl = configuration["MovieApi:BaseUrl"]; 
         }
 
-        public async Task<List<Movie>> FetchPopularMoviesAsync()
+        public async Task<List<Movie>> FetchPopularMoviesAsync(int page = 1)
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiMovieResponse>($"{_baseUrl}/movie/popular?language=en-US&page=1&api_key={_apiKey}");
+            var response = await _httpClient.GetFromJsonAsync<ApiMovieResponse>($"{_baseUrl}/movie/popular?language=en-US&page={page}&api_key={_apiKey}");
 
             var moviesToSave = response.Results.Select(m => new Movie
             {

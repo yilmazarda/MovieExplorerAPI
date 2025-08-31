@@ -39,8 +39,8 @@ namespace movie_explorer.Controllers
         }
 
         [HttpGet("popular")]
-        public async Task<IActionResult> Fetch() {
-            List<Movie> movies = await _movieService.GetPopularMoviesAsync();
+        public async Task<IActionResult> GetPopular(int page = 1) {
+            List<Movie> movies = await _movieService.GetPopularMoviesAsync(page);
             return Ok(movies);
         }
 

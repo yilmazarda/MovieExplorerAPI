@@ -32,9 +32,9 @@ namespace movie_explorer.Services
 
         public async Task DeleteMovieAsync(Movie movie) => await _repository.DeleteAsync(movie);
 
-        public async Task<List<Movie>> GetPopularMoviesAsync()
+        public async Task<List<Movie>> GetPopularMoviesAsync(int page = 1)
         {
-            var popular_movies = await _cache.GetStringAsync("Popular-movies"); //first check cache
+            var popular_movies = await _cache.GetStringAsync("Popular-movies page: " + page.ToString() + ""); //first check cache
             List<Movie> movies = new List<Movie>();
             if (popular_movies != null)
             {
@@ -43,7 +43,7 @@ namespace movie_explorer.Services
                 return movies;
             }
 
-            movies = await _externalMovieService.FetchPopularMoviesAsync();
+            movies = await _externalMovieService.FetchPopularMoviesAsync(page);
 
             foreach (var movie in movies)
             {
@@ -75,7 +75,7 @@ namespace movie_explorer.Services
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30) // 30 min lifetime
             };
 
-            await _cache.SetStringAsync("Popular-movies", jsonData, cacheOptions);
+            await _cache.SetStringAsync("Popular-movies page: " + page.ToString() + "", jsonData, cacheOptions);
 
             return movies;
         }
