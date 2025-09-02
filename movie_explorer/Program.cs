@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using movie_explorer.Data;
 using movie_explorer.Repositories;
 using movie_explorer.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +18,16 @@ builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IExternalMovieService, ExternalMovieService>();
 builder.Services.AddHttpClient<ExternalMovieService>();
 
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<IExternalGenreService, ExternalGenreService>();
+builder.Services.AddHttpClient<ExternalGenreService>();
 
-builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(Program));    
+
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 
 

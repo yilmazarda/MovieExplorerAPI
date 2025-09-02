@@ -15,7 +15,7 @@ namespace movie_explorer.Repositories
 
         public async Task<Movie?> GetByTmdbIdAsync(int id)
         {
-            return await _dbSet.FirstOrDefaultAsync(m => m.TmdbId == id);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(m => m.TmdbId == id);
         }
     }
 }

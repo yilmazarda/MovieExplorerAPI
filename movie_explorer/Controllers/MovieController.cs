@@ -40,13 +40,13 @@ namespace movie_explorer.Controllers
 
         [HttpGet("popular")]
         public async Task<IActionResult> GetPopular(int page = 1) {
-            List<Movie> movies = await _movieService.GetPopularMoviesAsync(page);
+            List<MovieDto> movies = await _movieService.GetPopularMoviesAsync(page);
             return Ok(movies);
         }
 
         [HttpGet("trending")]
         public async Task<IActionResult> GetTrending() {
-            List<Movie> movies = await _movieService.GetTrendingMoviesAsync();
+            List<MovieDto> movies = await _movieService.GetTrendingMoviesAsync();
             return Ok(movies);
         }
         

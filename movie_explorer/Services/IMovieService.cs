@@ -11,9 +11,9 @@ namespace movie_explorer.Services
         Task<Movie> AddMovieAsync(Movie quiz);
         Task DeleteMovieAsync(Movie movie);
         Task<IQueryable<Movie>> GetAllMoviesAsync();
-        Task<Movie> GetMovieByIdAsync(int id);
-        Task<List<Movie>> GetPopularMoviesAsync(int page = 1);
-        Task<List<Movie>> GetTrendingMoviesAsync();
+        Task<MovieDto> GetMovieByIdAsync(int id);
+        Task<List<MovieDto>> GetPopularMoviesAsync(int page = 1);
+        Task<List<MovieDto>> GetTrendingMoviesAsync();
         Task<Movie> UpdateMovieAsync(Movie quiz);
     }
 }
