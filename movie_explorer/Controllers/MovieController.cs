@@ -44,44 +44,44 @@ namespace movie_explorer.Controllers
 
         [HttpGet("popular")]
         public async Task<IActionResult> GetPopular(int page = 1) {
-            _logger.LogInformation("Getting popular movies");
+            _logger.LogInformation("MovieController: Getting popular movies");
 
             try
             {
                 List<MovieDto> movies = await _movieService.GetPopularMoviesAsync(page);
                 if (movies == null)
                 {
-                    _logger.LogWarning("Popular movies list is empty");
+                    _logger.LogWarning("MovieController: Popular movies list is empty");
                     return NotFound();
                 }
-                _logger.LogInformation("Popular movies retrieved succesfully");
+                _logger.LogInformation("MovieController: Popular movies retrieved succesfully");
                 return Ok(movies);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error occured during getting popular movies list");
+                _logger.LogError(e, "MovieController: Error occured during getting popular movies list");
                 return StatusCode(500, "Internal server error");
             }
         }
 
         [HttpGet("trending")]
         public async Task<IActionResult> GetTrending() {
-            _logger.LogInformation("Getting trending movies");
+            _logger.LogInformation("MovieController: Getting trending movies");
 
             try
             {
                 List<MovieDto> movies = await _movieService.GetTrendingMoviesAsync();
                 if (movies == null)
                 {
-                    _logger.LogWarning("Trending movies list is empty");
+                    _logger.LogWarning("MovieController: Trending movies list is empty");
                     return NotFound();
                 }
-                _logger.LogInformation("Trending movies retrieved successfully");
+                _logger.LogInformation("MovieController: Trending movies retrieved successfully");
                 return Ok(movies);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error occured during getting trending movies list");
+                _logger.LogError(e, "MovieController: Error occured during getting trending movies list");
                 return StatusCode(500, "Internal server error");
             }
         }

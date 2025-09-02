@@ -23,22 +23,22 @@ namespace movie_explorer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllGenresAsync()
         {
-            _logger.LogInformation("Getting all genres");
+            _logger.LogInformation("GenreController: Getting all genres");
 
             try
             {
                 var genres = await _genreService.GetAllGenresAsync();
                 if (genres == null)
                 {
-                    _logger.LogWarning("Genres list is empty");
+                    _logger.LogWarning("GenreController: Genres list is empty");
                     return NotFound();
                 }
-                _logger.LogInformation("Genres list retrieved successfully");
+                _logger.LogInformation("GenreController: Genres list retrieved successfully");
                 return Ok(genres);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "An error occured during getting all genres");
+                _logger.LogError(e, "GenreController: An error occured during getting all genres");
                 return StatusCode(500, "External server error");
             }
 
