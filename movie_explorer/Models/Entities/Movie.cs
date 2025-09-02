@@ -13,15 +13,34 @@ namespace movie_explorer.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Range(1, int.MaxValue, ErrorMessage = "TmdbId must be greater than 0")]
         public int TmdbId { get; set;}
+        
+        [Required]
         public string Name { get; set;}
+
+        [Required]
         public string Description { get; set;}
+
+        [Required]
         public string ImageUrl { get; set;}
+
+        [Required]
         public string Language { get; set;}
+
+        [Required]
         public int VoteCount { get; set;}
+
+        [Required]
         public float VoteAverage { get; set;}
+
+        [Required]
         public float Popularity { get; set;}
+
+        [Required]
         public DateTime ReleaseDate { get; set;}
+
+        [Required]
         public DateTime LastUpdated { get; set;}
 
         [JsonIgnore]

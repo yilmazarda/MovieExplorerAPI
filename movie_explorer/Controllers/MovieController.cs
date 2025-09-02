@@ -34,6 +34,8 @@ namespace movie_explorer.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(Movie movie) {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
             await _movieService.AddMovieAsync(movie);
             return CreatedAtAction(nameof(Get), new { TmdbId = movie.TmdbId }, movie);
         }

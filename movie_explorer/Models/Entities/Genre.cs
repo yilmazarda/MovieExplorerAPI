@@ -15,6 +15,8 @@ namespace movie_explorer.Models
         [JsonProperty("id")]
         public int TmdbId { get; set;}
         
+        [JsonProperty("name")]
+        [Required]
         public string Name { get; set;}
 
         [JsonIgnore]

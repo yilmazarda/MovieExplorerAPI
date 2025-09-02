@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using movie_explorer.Models;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace movie_explorer.Services
 {
@@ -22,8 +23,9 @@ namespace movie_explorer.Services
 
         public async Task<List<Genre>> FetchAllGenresAsync()
         {
-            var response = await _httpClient.GetFromJsonAsync<ApiGenreResponse>($"{_baseUrl}/genre/movie/list?api_key={_apiKey}");
-            
+            var responseString = await _httpClient.GetStringAsync($"{_baseUrl}/genre/movie/list?api_key={_apiKey}");
+            var response = JsonConvert.DeserializeObject<ApiGenreResponse>(responseString);
+
             var genresToSave = response.Genres.Select(g => new Genre
             {
                 TmdbId = g.TmdbId,

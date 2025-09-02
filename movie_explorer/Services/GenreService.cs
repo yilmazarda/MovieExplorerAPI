@@ -29,6 +29,7 @@ namespace movie_explorer.Services
             if (genres.Count() == 0)
             {
                 genresList = await _externalGenreService.FetchAllGenresAsync();
+                
                 await _repository.AddAllAsync(genresList);
             }
             else

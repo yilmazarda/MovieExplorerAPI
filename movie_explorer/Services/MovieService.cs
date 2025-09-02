@@ -115,7 +115,7 @@ namespace movie_explorer.Services
                     movie_data.VoteCount = movie.VoteCount;
                     movie_data.VoteAverage = movie.VoteAverage;
                     movie_data.Popularity = movie.Popularity;
-                    movie_data.ReleaseDate = movie.ReleaseDate;c
+                    movie_data.ReleaseDate = movie.ReleaseDate;
                     movie_data.LastUpdated = DateTime.UtcNow;
                     await _repository.UpdateAsync(movie_data);
                     continue;
